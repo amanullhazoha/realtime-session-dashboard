@@ -26,7 +26,7 @@ export const ThemeDirection = {
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '500', '700'] });
 
 const config = {
-  menuOrientation: MenuOrientation.VERTICAL,
+  menuOrientation: MenuOrientation.HORIZONTAL,
   miniDrawer: false,
   fontFamily: roboto.style.fontFamily,
   borderRadius: 8,

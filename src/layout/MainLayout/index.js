@@ -14,11 +14,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 // project imports
 import Header from './Header';
 import Sidebar from './Sidebar';
+import useConfig from 'hooks/useConfig';
 import HorizontalBar from './HorizontalBar';
 import MainContentStyled from './MainContentStyled';
 import Loader from 'components/ui-component/Loader';
-import Breadcrumbs from 'components/ui-component/extended/Breadcrumbs';
-import useConfig from 'hooks/useConfig';
+import Customization from 'layout/Customization/index';
 
 import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
 import { MenuOrientation } from 'config';
@@ -65,11 +65,11 @@ const MainLayout = ({ children }) => {
       {/* main content */}
       <MainContentStyled {...{ borderRadius, menuOrientation, open: drawerOpen, theme }}>
         <Container maxWidth={container ? 'lg' : false} {...(!container && { sx: { px: { xs: 0 } } })}>
-          {/* breadcrumb */}
-          <Breadcrumbs />
           {children}
         </Container>
       </MainContentStyled>
+
+      <Customization />
     </Box>
   );
 };
