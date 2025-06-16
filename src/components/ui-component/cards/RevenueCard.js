@@ -1,14 +1,10 @@
 import PropTypes from 'prop-types';
-
-// material-ui
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-// =============================|| REVENUE CARD ||============================= //
-
-const RevenueCard = ({ primary, secondary, content, iconPrimary, color }) => {
+const RevenueCard = ({ title, count, content, iconPrimary, color }) => {
   const IconPrimary = iconPrimary;
   const primaryIcon = iconPrimary ? <IconPrimary fontSize="large" /> : null;
 
@@ -31,12 +27,12 @@ const RevenueCard = ({ primary, secondary, content, iconPrimary, color }) => {
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Typography variant="h5" color="inherit">
-              {primary}
+              {title}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h3" color="inherit">
-              {secondary}
+              {count}
             </Typography>
           </Grid>
 
@@ -52,11 +48,10 @@ const RevenueCard = ({ primary, secondary, content, iconPrimary, color }) => {
 };
 
 RevenueCard.propTypes = {
-  primary: PropTypes.string,
-  secondary: PropTypes.string,
-  content: PropTypes.string,
-  iconPrimary: PropTypes.object,
-  color: PropTypes.string
+  title: PropTypes.string,
+  count: PropTypes.number,
+  color: PropTypes.string,
+  content: PropTypes.string
 };
 
 export default RevenueCard;

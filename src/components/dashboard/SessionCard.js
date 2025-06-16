@@ -35,7 +35,7 @@ const SessionCard = ({ agentName, roomName, participant, sessionDuration, startT
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h3">Agent Name</Typography>
+          <Typography variant="h3">{agentName}</Typography>
         </Grid>
 
         <Grid item xs={12}>
@@ -60,7 +60,7 @@ const SessionCard = ({ agentName, roomName, participant, sessionDuration, startT
             </Grid>
 
             <Grid item xs={6}>
-              <Typography variant="caption">Participant</Typography>
+              <Typography variant="caption">Participants</Typography>
               <Typography variant="h6">{participant}</Typography>
             </Grid>
           </Grid>
