@@ -1,48 +1,50 @@
+'use client';
+
 import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid';
+import { useState, useEffect } from 'react';
 import { gridSpacing } from 'store/constant';
 import SessionCard from 'components/dashboard/SessionCard';
 import RevenueCard from 'components/ui-component/cards/RevenueCard';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 
-const getDuration = (startedAt) => {
-  const diff = dayjs().diff(dayjs.unix(startedAt), 'second');
-
-  const hrs = Math.floor(diff / 3600)
-    .toString()
-    .padStart(2, '0');
-
-  const mins = Math.floor((diff % 3600) / 60)
-    .toString()
-    .padStart(2, '0');
-
-  const secs = (diff % 60).toString().padStart(2, '0');
-
-  return `${hrs}:${mins}:${secs}`;
-};
-
+// Function to format the start time from Unix timestamp
 const getStartTime = (startedTime) => {
   return dayjs.unix(startedTime).format('hh:mm:ss A');
 };
 
-export default async function Dashboard() {
-  let sessions = { count: 0, rooms: [] };
-  let error = null;
+export default function Dashboard() {
+  const [error, setError] = useState(null);
+  const [sessions, setSessions] = useState({ count: 0, rooms: [] });
 
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/api/sessions`, {
-      cache: 'no-store'
-    });
+  // Fetch sessions from the API
+  const fetchSessions = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/api/sessions`, {
+        cache: 'no-store'
+      });
 
-    if (!res.ok) {
-      error = `Failed to fetch: ${res.statusText}`;
-    } else {
+      if (!res.ok) {
+        setError(`Failed to fetch: ${res.statusText}`);
+        return;
+      }
+
       const { data } = await res.json();
-      sessions = data;
+
+      setSessions(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
     }
-  } catch (err) {
-    error = err.message;
-  }
+  };
+
+  // Fetch sessions on component mount and set an interval to refresh every 10 seconds
+  useEffect(() => {
+    fetchSessions();
+    const interval = setInterval(fetchSessions, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -64,10 +66,9 @@ export default async function Dashboard() {
                 <SessionCard
                   agentName={agentName}
                   roomName={room?.name}
-                  avatar="avatar-2.png"
+                  creationTime={room?.creationTime}
                   participant={room?.numParticipants}
                   startTime={getStartTime(room?.creationTime)}
-                  sessionDuration={getDuration(room?.creationTime)}
                 />
               </Grid>
             );

@@ -1,39 +1,51 @@
 'use client';
 
+import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import { ThemeMode } from 'config';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
+import { useState, useEffect } from 'react';
 import { gridSpacing } from 'store/constant';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Avatar from 'components/ui-component/extended/Avatar';
 
-const avatarImage = '/assets/images/users';
-
-const SessionCard = ({ agentName, roomName, participant, sessionDuration, startTime, avatar }) => {
+const SessionCard = ({ agentName, roomName, participant, startTime, creationTime }) => {
   const theme = useTheme();
-  const avatarProfile = avatar && `${avatarImage}/${avatar}`;
+  const [duration, setDuration] = useState('00:00:00');
+
+  // Calculate the session duration based on the creation time and update it every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const diff = dayjs().diff(dayjs.unix(creationTime), 'second');
+
+      const hrs = Math.floor(diff / 3600)
+        .toString()
+        .padStart(2, '0');
+
+      const mins = Math.floor((diff % 3600) / 60)
+        .toString()
+        .padStart(2, '0');
+
+      const secs = (diff % 60).toString().padStart(2, '0');
+
+      setDuration(`${hrs}:${mins}:${secs}`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Card
       sx={{
         p: 2,
-        bgcolor: theme.palette.mode === ThemeMode.DARK ? 'background.default' : 'grey.50',
         border: '1px solid',
         borderColor: 'divider',
+        bgcolor: theme.palette.mode === ThemeMode.DARK ? 'background.default' : 'grey.50',
         '&:hover': { borderColor: 'primary.main' }
       }}
     >
       <Grid container spacing={gridSpacing}>
-        <Grid item xs={12}>
-          <Grid container spacing={gridSpacing}>
-            <Grid item xs zeroMinWidth>
-              <Avatar alt={agentName} size="lg" src={avatarProfile} />
-            </Grid>
-          </Grid>
-        </Grid>
-
         <Grid item xs={12}>
           <Typography variant="h3">{agentName}</Typography>
         </Grid>
@@ -56,7 +68,7 @@ const SessionCard = ({ agentName, roomName, participant, sessionDuration, startT
           <Grid container spacing={gridSpacing}>
             <Grid item xs={6}>
               <Typography variant="caption">Session Duration</Typography>
-              <Typography variant="h6">{sessionDuration}</Typography>
+              <Typography variant="h6">{duration}</Typography>
             </Grid>
 
             <Grid item xs={6}>
@@ -71,11 +83,11 @@ const SessionCard = ({ agentName, roomName, participant, sessionDuration, startT
 };
 
 SessionCard.propTypes = {
-  avatar: PropTypes.string,
   roomName: PropTypes.string,
   startTime: PropTypes.string,
   agentName: PropTypes.string,
   participant: PropTypes.string,
+  creationTime: PropTypes.string,
   sessionDuration: PropTypes.string
 };
 
