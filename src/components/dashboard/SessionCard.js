@@ -33,7 +33,7 @@ const SessionCard = ({ agentName, roomName, participant, startTime, creationTime
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [creationTime]);
 
   return (
     <Card
@@ -87,8 +87,7 @@ SessionCard.propTypes = {
   startTime: PropTypes.string,
   agentName: PropTypes.string,
   participant: PropTypes.string,
-  creationTime: PropTypes.string,
-  sessionDuration: PropTypes.string
+  creationTime: PropTypes.string
 };
 
 export default SessionCard;
