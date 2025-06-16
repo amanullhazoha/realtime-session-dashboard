@@ -1,11 +1,11 @@
 'use client';
 
 import dayjs from 'dayjs';
-import Grid from '@mui/material/Grid';
 import { useState, useEffect } from 'react';
 import { gridSpacing } from 'store/constant';
 import SessionCard from 'components/dashboard/SessionCard';
 import RevenueCard from 'components/ui-component/cards/RevenueCard';
+import { Card, Box, CardContent, Divider, Grid, Typography } from '@mui/material';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 
 // Function to format the start time from Unix timestamp
@@ -53,27 +53,48 @@ export default function Dashboard() {
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12} md={4} lg={3}>
-        <RevenueCard color="orange.dark" title="Running Sessions" iconPrimary={OndemandVideoOutlinedIcon} count={sessions?.count || 0} />
+        <RevenueCard color="primary.dark" title="Running Sessions" iconPrimary={OndemandVideoOutlinedIcon} count={sessions?.count || 0} />
       </Grid>
 
       <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          {sessions?.rooms?.map((room) => {
-            const agentName = JSON.parse(room.metadata)?.task?.name || 'Unknown Agent';
+        <Card
+          variant="outlined"
+          sx={{
+            height: '100%',
+            '&:hover': {
+              boxShadow: 'rgba(32, 40, 45, 0.08) 0px 2px 14px 0px'
+            }
+          }}
+        >
+          <Box p={2}>
+            <Typography variant="h5">Live Sessions</Typography>
+          </Box>
+          <Divider />
 
-            return (
-              <Grid item xs={12} md={4} lg={3} key={room?.sid}>
-                <SessionCard
-                  agentName={agentName}
-                  roomName={room?.name}
-                  creationTime={room?.creationTime}
-                  participant={room?.numParticipants}
-                  startTime={getStartTime(room?.creationTime)}
-                />
+          <CardContent sx={{ p: 2, paddingBottom: '16px !important' }}>
+            {sessions?.count > 0 ? (
+              <Grid container spacing={gridSpacing}>
+                {sessions?.rooms?.map((room) => {
+                  const agentName = JSON.parse(room.metadata)?.task?.name || 'Unknown Agent';
+
+                  return (
+                    <Grid item xs={12} md={4} lg={3} key={room?.sid}>
+                      <SessionCard
+                        agentName={agentName}
+                        roomName={room?.name}
+                        creationTime={room?.creationTime}
+                        participant={room?.numParticipants}
+                        startTime={getStartTime(room?.creationTime)}
+                      />
+                    </Grid>
+                  );
+                })}
               </Grid>
-            );
-          })}
-        </Grid>
+            ) : (
+              <Typography color="color.secondary">No live sessions available.</Typography>
+            )}
+          </CardContent>
+        </Card>
       </Grid>
     </Grid>
   );
