@@ -57,7 +57,7 @@ export default async function Dashboard() {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           {sessions?.rooms?.map((room) => {
-            let agentName = JSON.parse(room.metadata)?.task?.name || 'Unknown Agent';
+            const agentName = JSON.parse(room.metadata)?.task?.name || 'Unknown Agent';
 
             return (
               <Grid item xs={12} md={4} lg={3} key={room?.sid}>
