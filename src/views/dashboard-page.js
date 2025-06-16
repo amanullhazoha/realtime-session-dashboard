@@ -1,44 +1,58 @@
-'use client';
-
 import Grid from '@mui/material/Grid';
 import { gridSpacing } from 'store/constant';
 import SessionCard from 'components/dashboard/SessionCard';
 import RevenueCard from 'components/ui-component/cards/RevenueCard';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 
-const userDetails = {
-  name: 'Gaetano',
-  id: '#1Card_Phoebe',
-  avatar: 'avatar-2.png',
-  contact: '253-418-5940',
-  location: 'Herminahaven',
-  email: 'alia_shields25@yahoo.com',
-  role: 'Investor Division Strategist',
-  about: 'Try to connect the SAS transmitter, maybe it will index the optical hard drive!'
-};
+export default async function Dashboard() {
+  let sessions = { count: 0, rooms: [] };
+  let error = null;
 
-const Dashboard = () => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/api/sessions`, {
+      cache: 'force-cache'
+    });
+    if (!res.ok) {
+      error = `Failed to fetch: ${res.statusText}`;
+    } else {
+      const { data } = await res.json();
+      sessions = data;
+    }
+  } catch (err) {
+    error = err.message;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12} md={4} lg={3}>
         <RevenueCard
-          secondary="10"
           color="orange.dark"
-          content="52 Last Month"
           primary="Running Sessions"
+          secondary={sessions?.count || 0}
           iconPrimary={OndemandVideoOutlinedIcon}
         />
       </Grid>
 
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={4} lg={3}>
-            <SessionCard {...userDetails} />
-          </Grid>
+          {sessions?.rooms?.map((room) => (
+            <Grid item xs={12} md={4} lg={3} key={room?.sid}>
+              <SessionCard
+                agentName=""
+                roomName={room?.name}
+                avatar="avatar-2.png"
+                sessionDuration="01:05:33"
+                startTime={room?.creationTime}
+                participant={room?.maxParticipants}
+              />
+            </Grid>
+          ))}
         </Grid>
       </Grid>
     </Grid>
   );
-};
-
-export default Dashboard;
+}

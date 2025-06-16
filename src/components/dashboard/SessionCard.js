@@ -1,44 +1,19 @@
 'use client';
 
 import PropTypes from 'prop-types';
-import { useState } from 'react';
-
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
-
-// project imports
 import { ThemeMode } from 'config';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
 import { gridSpacing } from 'store/constant';
+import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import Avatar from 'components/ui-component/extended/Avatar';
-
-// assets
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import NotInterestedTwoToneIcon from '@mui/icons-material/NotInterestedTwoTone';
-import ChatBubbleTwoToneIcon from '@mui/icons-material/ChatBubbleTwoTone';
 
 const avatarImage = '/assets/images/users';
 
-// ==============================|| Session CARD ||============================== //
-
-const SessionCard = ({ about, avatar, contact, email, location, name, role }) => {
+const SessionCard = ({ agentName, roomName, participant, sessionDuration, startTime, avatar }) => {
   const theme = useTheme();
   const avatarProfile = avatar && `${avatarImage}/${avatar}`;
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event?.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Card
@@ -54,7 +29,7 @@ const SessionCard = ({ about, avatar, contact, email, location, name, role }) =>
         <Grid item xs={12}>
           <Grid container spacing={gridSpacing}>
             <Grid item xs zeroMinWidth>
-              <Avatar alt={name} size="lg" src={avatarProfile} />
+              <Avatar alt={agentName} size="lg" src={avatarProfile} />
             </Grid>
           </Grid>
         </Grid>
@@ -67,12 +42,12 @@ const SessionCard = ({ about, avatar, contact, email, location, name, role }) =>
           <Grid container spacing={gridSpacing}>
             <Grid item xs={6}>
               <Typography variant="caption">Room Name</Typography>
-              <Typography variant="h6">Test Room</Typography>
+              <Typography variant="h6">{roomName}</Typography>
             </Grid>
 
             <Grid item xs={6}>
               <Typography variant="caption">Started Time</Typography>
-              <Typography variant="h6">09:50:33</Typography>
+              <Typography variant="h6">{startTime}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -81,12 +56,12 @@ const SessionCard = ({ about, avatar, contact, email, location, name, role }) =>
           <Grid container spacing={gridSpacing}>
             <Grid item xs={6}>
               <Typography variant="caption">Session Duration</Typography>
-              <Typography variant="h6">01:50:33</Typography>
+              <Typography variant="h6">{sessionDuration}</Typography>
             </Grid>
 
             <Grid item xs={6}>
               <Typography variant="caption">Participant</Typography>
-              <Typography variant="h6">10</Typography>
+              <Typography variant="h6">{participant}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -96,13 +71,12 @@ const SessionCard = ({ about, avatar, contact, email, location, name, role }) =>
 };
 
 SessionCard.propTypes = {
-  about: PropTypes.string,
   avatar: PropTypes.string,
-  contact: PropTypes.string,
-  email: PropTypes.string,
-  location: PropTypes.string,
-  name: PropTypes.string,
-  role: PropTypes.string
+  roomName: PropTypes.string,
+  startTime: PropTypes.string,
+  agentName: PropTypes.string,
+  participant: PropTypes.string,
+  sessionDuration: PropTypes.string
 };
 
 export default SessionCard;

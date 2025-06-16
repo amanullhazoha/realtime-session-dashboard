@@ -22,11 +22,12 @@ const RevenueCard = ({ primary, secondary, content, iconPrimary, color }) => {
             right: 13,
             top: { xs: 22, md: 14 },
             color: 'background.default',
-            '&> svg': { width: { xs: 80, md: 100 }, height: { xs: 80, md: 100 }, opacity: '0.5' }
+            '&> svg': { width: { xs: 80, md: 100 }, height: { xs: 80, md: 100 }, opacity: '0.5', pb: 2 }
           }}
         >
           {primaryIcon}
         </Typography>
+
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <Typography variant="h5" color="inherit">
@@ -38,6 +39,7 @@ const RevenueCard = ({ primary, secondary, content, iconPrimary, color }) => {
               {secondary}
             </Typography>
           </Grid>
+
           <Grid item xs={12}>
             <Typography variant="subtitle2" color="inherit">
               {content}

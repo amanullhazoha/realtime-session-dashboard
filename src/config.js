@@ -5,7 +5,7 @@ import { Roboto } from 'next/font/google';
 // like '/berry-material-react/react/default'
 export const BASE_PATH = '';
 
-export const DASHBOARD_PATH = '/sample-page';
+export const DASHBOARD_PATH = '/dashboard';
 export const HORIZONTAL_MAX_ITEM = 7;
 
 export const MenuOrientation = {
